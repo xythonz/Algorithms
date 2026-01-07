@@ -1,6 +1,6 @@
 import heapq
 
-def dijkstra(graph, start):
+def pathfind(graph, start):
     queue = []
     heapq.heappush(queue, (0, start))
     distances = {node: float('inf') for node in graph}

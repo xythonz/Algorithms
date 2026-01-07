@@ -1,7 +1,7 @@
 #jumpPoint.py
 import heapq
 
-def jump_point(grid, start, goal, heuristic):
+def pathfind(grid, start, goal, heuristic):
     def jump(x, y, px, py):
         if not (0 <= x < len(grid)) or not (0 <= y < len(grid[0])) or grid[x][y] == 1:
             return None

@@ -1,4 +1,4 @@
-def floyd_warshall(graph):
+def pathfind(graph):
     nodes = list(graph.keys())
     dist = {u: {v: float('inf') for v in nodes} for u in nodes}
 

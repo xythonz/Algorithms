@@ -1,6 +1,6 @@
 from queue import PriorityQueue
 
-def a_star(graph, start, goal, heuristic):
+def pathfind(graph, start, goal, heuristic):
     open_set = PriorityQueue()
     open_set.put((0, start))
     came_from = {}

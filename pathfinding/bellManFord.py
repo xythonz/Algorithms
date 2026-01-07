@@ -1,4 +1,4 @@
-def bellman_ford(graph, start):
+def pathfind(graph, start):
     distances = {node: float('inf') for node in graph}
     distances[start] = 0
 
