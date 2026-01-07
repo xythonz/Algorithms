@@ -24,6 +24,6 @@ def sort(unsorted):
     
     return res
 
-timeComplexity = "O(n + k) average, O(n²) worst case"
+timeComplexity = "O(n + k)"
 spaceComplexity = "O(n + k)"
 variantOf = ""

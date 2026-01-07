@@ -1,4 +1,3 @@
-#strand sort not in place in one function
 def sort(unsorted):
     """Recursively builds sorted sublists and merges them to sort the entire list."""
     def merge(sorted1, sorted2):

@@ -10,3 +10,6 @@ def sort(unsorted):
     
     time.sleep(max(unsorted) * 0.01 + 0.1)
     return res
+
+timeComplexity = "O(n + k)"
+spaceComplexity = "O(n)"

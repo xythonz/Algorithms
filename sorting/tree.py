@@ -1,4 +1,3 @@
-#tree sort
 def sort(unsorted):
     """Creates a binary tree from the list and performs an in-order traversal to sort it."""
     class TreeNode:
