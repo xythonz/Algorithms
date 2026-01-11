@@ -15,12 +15,12 @@ def search(data, target):
     while low <= high:
         mid = (low + high) // 2
         if data[mid] == target:
-            return True
+            return mid
         elif data[mid] < target:
             low = mid + 1
         else:
             high = mid - 1
-    return False
+    return -1
 
 timeComplexity = "O(log n)"
 spaceComplexity = "O(1)"

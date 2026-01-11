@@ -7,11 +7,11 @@ def search(data, target):
         prev = step
         step += int(len(data) ** 0.5)
         if prev >= len(data):
-            return False
+            return -1
     for i in range(prev, min(step, len(data))):
         if data[i] == target:
-            return True
-    return False
+            return i
+    return -1
 
 timeComplexity = "O(√n)"
 spaceComplexity = "O(1)"
