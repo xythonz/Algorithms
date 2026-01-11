@@ -389,8 +389,17 @@ class InteractiveGraphEditor:
                         self.draw_graph()
             else:
                 if node:
-                    self.dragging_node = node
-                    self.update_status(f"Dragging node {node}")
+                    # Start edge creation from this node
+                    self.creating_edge = True
+                    self.edge_start_node = node
+                    if self.dark_mode:
+                        self.btn_add_edge.color = '#4d4d4d'
+                        self.btn_add_edge.hovercolor = '#4d4d4d'
+                    else:
+                        self.btn_add_edge.color = '0.8'
+                        self.btn_add_edge.hovercolor = '0.8'
+                    self.fig.canvas.draw_idle()
+                    self.update_status(f"First node: {node}. Click second node (ESC to cancel)")
                 else:
                     node_name = self.current_node_name
                     if not node_name:
@@ -526,7 +535,7 @@ class InteractiveGraphEditor:
                     is_path_edge = (min(node, neighbor), max(node, neighbor)) in path_edges
                     if is_path_edge:
                         edge_color = "#ff0000"
-                        linewidth = max(3.0, weight * (x_max - x_min) / 8)
+                        linewidth = 5.0
                         alpha = 1.0
                         zorder = 2
                     else:
@@ -535,7 +544,7 @@ class InteractiveGraphEditor:
                         else:
                             normalized_weight = 0.5
                         edge_color = self.cmap(normalized_weight)
-                        linewidth = max(0.5, weight * view_width / 10)
+                        linewidth = 2.5
                         alpha = 0.7
                         zorder = 1
                     self.graph_ax.plot([x1, x2], [y1, y2], color=edge_color, alpha=alpha, linewidth=linewidth, zorder=zorder)
