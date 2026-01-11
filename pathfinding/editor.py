@@ -62,17 +62,19 @@ class InteractiveGraphEditor:
         self.btn_toggle_dark.on_clicked(self.toggle_dark_mode)
         self.btn_clear = Button(plt.axes([left_margin, start_y - 0.46, control_width, control_height]), 'Clear Graph')
         self.btn_clear.on_clicked(self.clear_graph)
-        self.btn_arrange = Button(plt.axes([left_margin, start_y - 0.52, control_width, control_height]), 'Arrange')
+        self.layout_radio_ax = plt.axes([left_margin+control_width+0.02, start_y - 0.62, control_width, 0.14])
+        self.layout_radio = RadioButtons(self.layout_radio_ax, ('Kamada-Kawaii', 'Circle', 'Spring', 'Shell'), active=0)
+        self.btn_arrange = Button(plt.axes([left_margin+control_width+0.02, start_y - 0.68, control_width, control_height]), 'Arrange')
         self.btn_arrange.on_clicked(self.arrange_graph)
-        self.btn_print = Button(plt.axes([left_margin, start_y - 0.58, control_width, control_height]), 'Print Graph')
+        self.btn_print = Button(plt.axes([left_margin, start_y - 0.52, control_width, control_height]), 'Print Graph')
         self.btn_print.on_clicked(self.print_graph)
-        self.btn_example = Button(plt.axes([left_margin, start_y - 0.64, control_width, control_height]), 'Load Example')
+        self.btn_example = Button(plt.axes([left_margin, start_y - 0.58, control_width, control_height]), 'Load Example')
         self.btn_example.on_clicked(self.load_example)
         self.status_text = self.fig.text((left_margin + control_width/2)+0.5, 0.01, 'Everything OK', fontsize=10, ha='center', va='bottom', bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.8))
-        self.start_text = self.fig.text(left_margin, 0.215, 'Start Node:', fontsize=10, ha='left')
-        self.goal_text = self.fig.text(left_margin, 0.165, 'Goal Node:', fontsize=10, ha='left')
-        self.start_input = TextBox(plt.axes([left_margin + 0.08, 0.2, control_width - 0.08, control_height]), '', initial=self.start_node if self.start_node else '')
-        self.goal_input = TextBox(plt.axes([left_margin + 0.08, 0.15, control_width - 0.08, control_height]), '', initial=self.goal_node if self.goal_node else '')
+        self.start_text = self.fig.text(left_margin, 0.275, 'Start Node:', fontsize=10, ha='left')
+        self.goal_text = self.fig.text(left_margin, 0.225, 'Goal Node:', fontsize=10, ha='left')
+        self.start_input = TextBox(plt.axes([left_margin + 0.08, 0.26, control_width - 0.08, control_height]), '', initial=self.start_node if self.start_node else '')
+        self.goal_input = TextBox(plt.axes([left_margin + 0.08, 0.21, control_width - 0.08, control_height]), '', initial=self.goal_node if self.goal_node else '')
         self.start_input.on_submit(self.update_start_node)
         self.goal_input.on_submit(self.update_goal_node)
         self.pathfinding_functions = {}
@@ -141,7 +143,10 @@ class InteractiveGraphEditor:
             self.pathfinding_radio_ax.set_facecolor('#2d2d2d')
             for label in self.pathfinding_radio.labels:
                 label.set_color('white')
-            self.cmap = cm.plasma
+            self.layout_radio_ax.set_facecolor('#2d2d2d')
+            for label in self.layout_radio.labels:
+                label.set_color('white')
+            self.cmap = cm.viridis
             self.sm.set_cmap(self.cmap)
         else:
             self.fig.patch.set_facecolor('white')
@@ -160,7 +165,10 @@ class InteractiveGraphEditor:
             self.pathfinding_radio_ax.set_facecolor('white')
             for label in self.pathfinding_radio.labels:
                 label.set_color('black')
-            self.cmap = cm.viridis
+            self.layout_radio_ax.set_facecolor('white')
+            for label in self.layout_radio.labels:
+                label.set_color('black')
+            self.cmap = cm.plasma
             self.sm.set_cmap(self.cmap)
         self.fig.canvas.draw_idle()
     
@@ -180,8 +188,20 @@ class InteractiveGraphEditor:
             for neighbor, weight in neighbors.items():
                 if not G.has_edge(node, neighbor):
                     G.add_edge(node, neighbor, weight=weight)
+
+        selected_layout = self.layout_radio.value_selected
         try:
-            pos = nx.kamada_kawai_layout(G)
+            if selected_layout == 'Kamada-Kawaii':
+                pos = nx.kamada_kawai_layout(G)
+            elif selected_layout == 'Circle':
+                pos = nx.circular_layout(G)
+            elif selected_layout == 'Spring':
+                pos = nx.spring_layout(G)
+            elif selected_layout == 'Shell':
+                pos = nx.shell_layout(G)
+            else:
+                pos = nx.kamada_kawai_layout(G)
+
             if pos:
                 center_x = sum(p[0] for p in pos.values()) / len(pos)
                 center_y = sum(p[1] for p in pos.values()) / len(pos)
@@ -189,7 +209,7 @@ class InteractiveGraphEditor:
                     x, y = pos[node]
                     pos[node] = (x - center_x, y - center_y)
             self.pos = pos
-            self.update_status("Graph arranged with Kamada-Kawai layout")
+            self.update_status(f"Graph arranged with {selected_layout} layout")
             self.draw_graph()
         except Exception as e:
             self.update_status(f"Arrangement failed: {str(e)}")
