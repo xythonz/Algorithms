@@ -1,6 +1,10 @@
+# A* Algorithm
 from queue import PriorityQueue
 
-def pathfind(graph, start, goal, heuristic):
+def pathfind(graph, start, goal):
+    def heuristic(node, goal):
+        return 0
+
     open_set = PriorityQueue()
     open_set.put((0, start))
     came_from = {}
@@ -18,7 +22,8 @@ def pathfind(graph, start, goal, heuristic):
                 path.append(current)
                 current = came_from[current]
             path.append(start)
-            return path[::-1]
+            path = path[::-1]
+            return path, g_score[goal]
 
         for neighbor, weight in graph[current].items():
             tentative_g_score = g_score[current] + weight
@@ -30,7 +35,4 @@ def pathfind(graph, start, goal, heuristic):
                 if not any(neighbor == item[1] for item in open_set.queue):
                     open_set.put((f_score[neighbor], neighbor))
 
-    return None
-
-timeComplexity = "O((V + E) log V)"
-spaceComplexity = "O(V)"
+    return [], None

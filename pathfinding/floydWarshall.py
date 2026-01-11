@@ -1,16 +1,34 @@
-def pathfind(graph):
-    nodes = list(graph.keys())
-    dist = {u: {v: float('inf') for v in nodes} for u in nodes}
+from collections import deque
 
-    for u in nodes:
-        dist[u][u] = 0
-        for v, weight in graph[u].items():
-            dist[u][v] = weight
-
-    for k in nodes:
-        for i in nodes:
-            for j in nodes:
-                if dist[i][j] > dist[i][k] + dist[k][j]:
-                    dist[i][j] = dist[i][k] + dist[k][j]
-
-    return dist
+def pathfind(graph, start, goal):
+    if start not in graph or goal not in graph:
+        return [], float('inf')
+    
+    queue = deque([start])
+    visited = {start: None}
+    distances = {start: 0}
+    
+    while queue:
+        current = queue.popleft()
+        
+        if current == goal:
+            break
+        
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                visited[neighbor] = current
+                distances[neighbor] = distances[current] + 1  # Each edge has weight 1
+                queue.append(neighbor)
+    
+    if goal not in visited:
+        return [], float('inf')
+    
+    # Reconstruct path
+    path = []
+    current = goal
+    while current is not None:
+        path.append(current)
+        current = visited[current]
+    path.reverse()
+    
+    return path, distances[goal]
