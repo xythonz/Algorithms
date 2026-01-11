@@ -1,2 +1,2 @@
 ## **Algorithms**
-A collection of algorithms of many aspects -> sorting, searching, pathfinding currently.
+A collection of algorithms for all sorts of applications.
