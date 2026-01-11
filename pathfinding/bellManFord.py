@@ -1,5 +1,7 @@
 # Bellman-Ford Algorithm
-def pathfind(graph, start, goal):
+def pathfind(graph, start, goal, positions):
+    # Bellman-Ford finds shortest paths with negative edge support
+    # It doesn't use heuristics, but we accept positions for consistency
     distances = {node: float('inf') for node in graph}
     predecessors = {node: None for node in graph}
     distances[start] = 0

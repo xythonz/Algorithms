@@ -1,7 +1,9 @@
 # Dijkstra's Algorithm
 import heapq
 
-def pathfind(graph, start, goal):
+def pathfind(graph, start, goal, positions):
+    # Dijkstra's algorithm finds shortest paths in graphs with non-negative edges
+    # It doesn't use heuristics, but we accept positions for consistency
     queue = []
     heapq.heappush(queue, (0, start))
     distances = {node: float('inf') for node in graph}
